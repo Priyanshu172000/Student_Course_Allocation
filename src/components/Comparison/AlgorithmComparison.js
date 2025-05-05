@@ -1,20 +1,20 @@
 import React from 'react';
 import OriginalAlgorithm from '../../algorithms/OriginalAlgorithm';
-import GaleShapleyAlgorithm from '../../algorithms/GaleShapleyAlgorithm';
+import minSpread from '../../algorithms/GaleShapleyAlgorithm';
 import './AlgorithmComparison.css';
 
 const AlgorithmComparison = ({ students, courses, courseCapacities, preferences }) => {
   const runAlgorithms = () => {
     const algorithms = [
-      { name: 'Original Algorithm', instance: new OriginalAlgorithm(students, courses, courseCapacities, preferences) },
-      { name: 'Gale-Shapley Algorithm', instance: new GaleShapleyAlgorithm(students, courses, courseCapacities, preferences) }
+      { name: 'Least Dissatisfaction', instance: new OriginalAlgorithm(students, courses, courseCapacities, preferences) },
+      { name: 'minSpread', instance: new minSpread(students, courses, courseCapacities, preferences) }
     ];
-    const results = algorithms.map(alg => {
+    let result = algorithms.map(alg => {
       try {
         const allocation = alg.instance.calculateAllocation();
-        const metrics = alg.instance.calculateMetrics(allocation);
+        let metrics = alg.instance.calculateMetrics(allocation);
         return {
-          name: alg.name,
+          name: alg.name, 
           allocation,
           metrics,
           error: null
@@ -29,10 +29,24 @@ const AlgorithmComparison = ({ students, courses, courseCapacities, preferences 
       }
     });
 
-    return results;
+    return result;
   };
 
-  const results = runAlgorithms();
+  let results = runAlgorithms();
+
+  const renderStudentAllocation = (studentId, courseId, studentPreferences) => {
+    const preferenceRank = Object.values(studentPreferences).indexOf(courseId) + 1;
+    
+    return (
+      <div key={studentId} className="student-allocation">
+        <div className="allocation-result">
+          <span className="student-name">Student {studentId}</span>
+          <span className="course-value">Course {courseId}</span>
+          <span className="preference-rank">(Preference #{preferenceRank})</span>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="algorithm-comparison">
@@ -47,22 +61,20 @@ const AlgorithmComparison = ({ students, courses, courseCapacities, preferences 
               <>
                 <div className="allocation-details">
                   <h4>Allocation Results:</h4>
-                  <ul>
+                  <div className="allocation-list">
                     {Object.entries(result.allocation).map(([student, course]) => (
-                      <li key={student}>
-                        Student {student} → Course {course}
-                      </li>
+                      renderStudentAllocation(student, course, preferences[student])
                     ))}
-                  </ul>
+                  </div>
                 </div>
                 <div className="metrics-details">
                   <h4>Performance Metrics:</h4>
                   <ul>
                     <li>Total Preference Score: {result.metrics.totalPreferenceScore}</li>
-                    <li>Average Preference Score: {result.metrics.averagePreferenceScore.toFixed(2)}</li>
                     <li>Min Preference Score: {result.metrics.minPreferenceScore}</li>
                     <li>Max Preference Score: {result.metrics.maxPreferenceScore}</li>
-                    {/* <li>Fairness Score: {result.metrics.fairnessScore}</li> */}
+                    <li>Allocated Students: {result.metrics.totalAllocated}</li>
+                    <li>Fairness Score: {result.metrics.fairnessScore}</li>
                   </ul>
                 </div>
               </>
