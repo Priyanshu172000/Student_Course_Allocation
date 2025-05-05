@@ -226,7 +226,7 @@ class OriginalAlgorithm extends BaseAlgorithm {
       }
       
       preprocessGraph(graph, seats); // Preprocess graph for preferences and seats
-      console.log(graph.adj);
+      // console.log(graph.adj);
       const matchA = Array(graph.numStudents + 1).fill(0);
       const matchH = Array(graph.numCourses + 1).fill(0);
       
@@ -239,17 +239,11 @@ class OriginalAlgorithm extends BaseAlgorithm {
     
       makeCoalitionFree(matchA2, matchH2, graph);
       for (let a = 1; a <= numStudents; ++a) {
-        allocation[a] = matchA2[a] !== 0 ? courseId[matchA2[a]] : null;
+        if (matchA2[a])
+        allocation[a] =  courseId[matchA2[a]];
       }
       
       makeCoalitionFree(matchA, matchH, graph);
-      
-    
-
-        
-        
-        
-        
       
     
     return allocation;
