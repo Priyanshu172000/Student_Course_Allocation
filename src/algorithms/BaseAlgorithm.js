@@ -36,46 +36,60 @@ class BaseAlgorithm {
 
   // Method to calculate metrics for comparison
   calculateMetrics(allocation) {
-    const metrics = {
+    let metrics = {
       totalPreferenceScore: 0,
       averagePreferenceScore: 0,
       minPreferenceScore: Infinity,
       maxPreferenceScore: 0,
       fairnessScore: 0,
       totalAllocated: 0,
-      allocationRate: 0
+      allocationRate: 0,
+      unassigned: 0,
     };
-
     // Calculate preference scores and track allocations
-    const courseAllocations = {};
+    let courseAllocations = {};
     for (let i = 1; i <= this.courses; i++) {
       courseAllocations[i] = 0;
     }
 
+    // Initialize unassigned count
+    metrics.unassigned = this.students; // Start with all students unassigned
+
     for (let student = 1; student <= this.students; student++) {
       const allocatedCourse = allocation[student];
-      if (allocatedCourse) {
+      
+      // Only count valid course allocations (not null and within capacity)
+      if (allocatedCourse && allocatedCourse !== null) {
         courseAllocations[allocatedCourse]++;
-        metrics.totalAllocated++;
+        if (courseAllocations[allocatedCourse] <= this.courseCapacities[allocatedCourse]) {
+          metrics.totalAllocated++;
+          metrics.unassigned--; // Decrease unassigned count for each valid allocation
+        }
       }
 
       const preferenceList = this.preferences[student];
       let preferenceScore = 0;
 
       // Find the position of allocated course in preference list
-      for (let pos = 1; pos <= Object.keys(preferenceList).length; pos++) {
-        if (preferenceList[pos] === allocatedCourse) {
-          preferenceScore = pos;
-          break;
+      if (allocatedCourse && allocatedCourse !== null) {
+        for (let pos = 1; pos <= Object.keys(preferenceList).length; pos++) {
+          if (preferenceList[pos] === allocatedCourse) {
+            preferenceScore = pos;
+            break;
+          }
         }
       }
 
       metrics.totalPreferenceScore += preferenceScore;
-      metrics.minPreferenceScore = Math.min(metrics.minPreferenceScore, preferenceScore);
+      if (preferenceScore > 0) {
+        metrics.minPreferenceScore = Math.min(metrics.minPreferenceScore, preferenceScore);
+      }
+      
       metrics.maxPreferenceScore = Math.max(metrics.maxPreferenceScore, preferenceScore);
     }
 
-    metrics.averagePreferenceScore = metrics.totalPreferenceScore / this.students;
+    metrics.averagePreferenceScore = metrics.totalAllocated > 0 ? 
+      metrics.totalPreferenceScore / metrics.totalAllocated : 0;
     metrics.allocationRate = metrics.totalAllocated / this.students;
     
     // Calculate fairness score (lower is better)
