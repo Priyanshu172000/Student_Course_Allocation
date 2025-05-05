@@ -341,7 +341,7 @@ const HouseAllocationApp = () => {
   return (
     <div className="course-allocation-container">
       <div className="app-header">
-        <h1>Course Allocation Problem</h1>
+        <h1>Student-Course Allocation</h1>
         <p className="app-description">
           Assign courses to students based on preference rankings
         </p>
