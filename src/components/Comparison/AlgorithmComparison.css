@@ -1,15 +1,5 @@
 .algorithm-comparison {
-  margin: 20px 0;
   padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.algorithm-comparison h2 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 20px;
 }
 
 .comparison-grid {
@@ -20,51 +10,91 @@
 }
 
 .algorithm-result {
-  background-color: white;
-  padding: 20px;
+  background: #fff;
   border-radius: 8px;
+  padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .algorithm-result h3 {
-  color: #3498db;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.allocation-details,
-.metrics-details {
-  margin-top: 15px;
-}
-
-.allocation-details h4,
-.metrics-details h4 {
   color: #2c3e50;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+.allocation-details {
+  margin-bottom: 20px;
+}
+
+.allocation-details h4 {
+  color: #34495e;
   margin-bottom: 10px;
 }
 
-.allocation-details ul,
+.allocation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.student-allocation {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.allocation-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9em;
+}
+
+.student-name {
+  font-weight: 600;
+  color: #2c3e50;
+  min-width: 80px;
+}
+
+.course-value {
+  color: #2980b9;
+  font-weight: 500;
+}
+
+.preference-rank {
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+.metrics-details {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 15px;
+}
+
+.metrics-details h4 {
+  color: #34495e;
+  margin-bottom: 10px;
+}
+
 .metrics-details ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.allocation-details li,
 .metrics-details li {
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.allocation-details li:last-child,
-.metrics-details li:last-child {
-  border-bottom: none;
+  padding: 5px 0;
+  color: #2c3e50;
+  display: flex;
+  justify-content: space-between;
 }
 
 .error-message {
   color: #e74c3c;
-  background-color: #fadbd8;
   padding: 10px;
+  background: #fde8e8;
   border-radius: 4px;
   margin-top: 10px;
 }
